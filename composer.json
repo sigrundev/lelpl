@@ -1,5 +1,5 @@
 {
-    "name": "vegvisir/lelpl",
+    "name": "sigrun/lelpl",
     "description": "Laravel transport for EmailLabs API",
     "type": "library",
     "license": "MIT",
