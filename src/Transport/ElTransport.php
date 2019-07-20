@@ -32,6 +32,20 @@ class ElTransport extends Transport
     protected $appSecret;
 
     /**
+     * EmailLabs SMTP account.
+     *
+     * @var string
+     */
+    protected $smtpAccount;
+
+    /**
+     * EmailLabs API client.
+     *
+     * @var \EmailLabs\Actions\Sendmail
+     */
+    protected $client;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -40,7 +54,7 @@ class ElTransport extends Transport
         $this->appSecret = config('emaillabs.app_secret');
         $this->smtpAccount = config('emaillabs.smtp_account');
 
-        $this->client = $this->getClient();
+        $this->client = $this->setClient();
     }
 
     /**
@@ -76,7 +90,7 @@ class ElTransport extends Transport
      *
      * @return \EmailLabs\Actions\Sendmail
      */
-    protected function getClient()
+    protected function setClient()
     {
         $client = new Sendmail();
 
