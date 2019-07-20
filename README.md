@@ -1,6 +1,7 @@
 # lelpl
 
 Laravel mail driver for EmaillLabs API. EmailLabs is available at [emaillabs.pl](https://emaillabs.pl).
+Adds ***el*** mail driver.
 
 ## Installation
 
