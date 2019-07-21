@@ -79,7 +79,7 @@ class ElTransport extends Transport
         $this->client->getResult();
 
         if (\count(EmailLabsErrorHandler::getErrors()) > 0) {
-            return false;
+            throw new \Exception('Sendmail error');
         }
 
         return true;
