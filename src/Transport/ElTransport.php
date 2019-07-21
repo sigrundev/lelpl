@@ -71,7 +71,7 @@ class ElTransport extends Transport
         $this->client->setData('from', config('mail.from.address'));
         $this->client->setData('from_name', config('mail.from.name'));
 
-        $this->client->setData('to', $message->getTo());
+        $this->client->setData('to', $this->getTo($message));
         $this->client->setData('subject', $message->getSubject());
         //Html or txt are required
         $this->client->setData('html', $message->getBody());
@@ -99,5 +99,23 @@ class ElTransport extends Transport
         $client->setData('smtp_account', $this->smtpAccount);
 
         return $client;
+    }
+
+    /**
+     * Get EmailLabs recipents list.
+     *
+     * @param Swift_Mime_SimpleMessage $message
+     *
+     * @return array
+     */
+    protected function getTo(Swift_Mime_SimpleMessage $message)
+    {
+        $messageTo = $message->getTo();
+
+        return array_map(function ($val) {
+            return [
+                'receiver_name' => $val,
+            ];
+        }, $messageTo);
     }
 }
