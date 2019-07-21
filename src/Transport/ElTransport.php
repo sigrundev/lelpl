@@ -63,6 +63,8 @@ class ElTransport extends Transport
      * @param Swift_Mime_SimpleMessage $message           Message object
      * @param mixed                    &$failedRecipients Failed recipents container
      *
+     * @throws Exception
+     *
      * @return bool
      */
     public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
@@ -78,8 +80,9 @@ class ElTransport extends Transport
 
         $this->client->getResult();
 
-        if (\count(EmailLabsErrorHandler::getErrors()) > 0) {
-            throw new \Exception('Sendmail error');
+        $errors = EmailLabsErrorHandler::getErrors();
+        if (\is_array($errors) && \count($errors) > 0) {
+            throw new \Exception($errors[0]['msg']);
         }
 
         return true;
@@ -111,11 +114,20 @@ class ElTransport extends Transport
     protected function getTo(Swift_Mime_SimpleMessage $message)
     {
         $messageTo = $message->getTo();
+        $elTo = [];
 
-        return array_map(function ($val) {
-            return [
-                'receiver_name' => $val,
-            ];
-        }, $messageTo);
+        foreach ($messageTo as $toEmail => $toName) {
+            if (null === $toName) {
+                $elTo[$toEmail] = [
+                    'receiver_name' => $toEmail,
+                ];
+            } else {
+                $elTo[$toEmail] = [
+                    'receiver_name' => $toName,
+                ];
+            }
+        }
+
+        return $elTo;
     }
 }
